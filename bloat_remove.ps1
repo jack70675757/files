@@ -1,6 +1,3 @@
-# Run as Administrator
-
-# Safely remove Xbox apps (skipping known non-removable system apps)
 Get-AppxPackage -AllUsers | Where-Object {
     $_.Name -like "*xbox*" -and $_.Name -notmatch "XboxGameCallableUI|GamingApp|XboxIdentityProvider"
 } | ForEach-Object {
@@ -11,7 +8,6 @@ Get-AppxPackage -AllUsers | Where-Object {
     }
 }
 
-# App list to remove (unchanged)
 $apps = @(
   'Clipchamp.Clipchamp','Microsoft.3DBuilder','Microsoft.549981C3F5F10','Microsoft.BingFinance',
   'Microsoft.BingFoodAndDrink','Microsoft.BingHealthAndFitness','Microsoft.BingNews','Microsoft.BingSports',
@@ -33,7 +29,6 @@ $apps = @(
   'SlingTV','Spotify','TikTok','TuneInRadio','Twitter','Viber','WinZipUniversal','Wunderlist','XING'
 )
 
-# Bulk uninstall
 foreach ($app in $apps) {
     $pkgs = Get-AppxPackage -AllUsers -Name $app -ErrorAction SilentlyContinue
     foreach ($pkg in $pkgs) {
