@@ -28,7 +28,6 @@ $apps = @(
   'PicsArt-PhotoStudio','Plex','PolarrPhotoEditorAcademicEdition','Royal Revolt','Shazam','Sidia.LiveWallpaper',
   'SlingTV','Spotify','TikTok','TuneInRadio','Twitter','Viber','WinZipUniversal','Wunderlist','XING'
 )
-
 foreach ($app in $apps) {
     $pkgs = Get-AppxPackage -AllUsers -Name $app -ErrorAction SilentlyContinue
     foreach ($pkg in $pkgs) {
@@ -39,3 +38,26 @@ foreach ($app in $apps) {
         }
     }
 }
+
+$services = @(
+    "DiagTrack", "dmwappushservice", "MapsBroker", "RetailDemo", "RemoteRegistry",
+    "Fax", "XblAuthManager", "XblGameSave", "XboxNetApiSvc", "SysMain", "WSearch"
+)
+foreach ($svc in $services) {
+    Stop-Service -Name $svc -Force -ErrorAction SilentlyContinue
+    Set-Service -Name $svc -StartupType Disabled
+}
+
+New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "AllowCortana" -PropertyType DWord -Value 0 -Force
+New-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "DisableSearchBoxSuggestions" -PropertyType DWord -Value 1 -Force
+
+Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "MenuShowDelay" -Value "0"
+Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "ForegroundFlashCount" -Value 1
+Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAnimations" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewAlphaSelect" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewShadow" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "FadeStartMenu" -Value 0
+
+powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+powercfg.exe -SETACTIVE e9a42b02-d5df-448d-aa00-03f14749eb61
